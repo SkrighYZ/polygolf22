@@ -234,6 +234,31 @@ class GolfApp(App):
             text.set_stroke(1, stroke_color_land)
             self.svgplot.append(text)
 
+    def plot_std(self, step_play_dict, idx):
+        base_stroke_color = "0,0,0"
+        if not step_play_dict["admissible"]:
+            base_stroke_color = "255,0,0"
+        stroke_color_air = "rgba({}, 0.2)".format(base_stroke_color)
+        stroke_color_land = "rgba({}, 1)".format(base_stroke_color)
+
+        # if isinstance(step_play_dict["segment_air"], sympy.geometry.Segment2D):
+        #     sa = self.draw_line(step_play_dict["segment_air"])
+        #     sa.set_stroke(3, stroke_color_air)
+        #     self.svgplot.append(sa)
+        # elif isinstance(step_play_dict["segment_air"], sympy.geometry.Point2D):
+        #     sa = self.draw_point(step_play_dict["segment_air"])
+        #     sa.set_stroke(3, stroke_color_air)
+        #     self.svgplot.append(sa)
+
+        if isinstance(step_play_dict["segment_land"], sympy.geometry.Segment2D):
+            sl = self.draw_line(step_play_dict["segment_land"])
+            sl.set_stroke(1, stroke_color_land)
+            self.svgplot.append(sl)
+        elif isinstance(step_play_dict["segment_land"], sympy.geometry.Point2D):
+            sl = self.draw_point(step_play_dict["segment_land"])
+            sl.set_stroke(1, stroke_color_land)
+            self.svgplot.append(sl)
+
     def update_score_table(self):
         for player_idx, score in enumerate(self.golf_game.scores):
             self.score_table.item_at(0, player_idx).set_text("{}, {}".format(self.golf_game.player_names[player_idx], self.golf_game.skills[player_idx]))

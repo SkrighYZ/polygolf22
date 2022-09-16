@@ -441,7 +441,12 @@ class GolfGame:
                 self.logger.debug("Received Distance: {:.3f}, Angle: {:.3f} from {} in {:.3f}s".format(float(distance), float(angle), self.player_names[player_idx], step_time))
                 if self.use_gui:
                     self.golf_app.set_label_text("{}, ({:.2f},{:.2f})".format(self.golf_app.get_label_text(), float(distance), float(angle)))
+                
                 step_play_dict = self.__move(distance, angle, player_idx)
+
+                step_play_dicts = []
+                for i in range(50):
+                    step_play_dicts.append(self.__move(distance, angle, player_idx))
                 
                 self.curr_locs[player_idx] = step_play_dict["observed_final_point"]
                 if not step_play_dict["admissible"]:
@@ -451,6 +456,8 @@ class GolfGame:
 
                 if do_update and self.use_gui:
                     self.golf_app.plot(step_play_dict, len(self.played[player_idx]))
+                    for i in range(50):
+                        self.golf_app.plot_std(step_play_dicts[i], len(self.played[player_idx]))
                 
                 if step_play_dict["reached_target"]:
                     self.logger.info("{} reached Target with score {}".format(self.player_names[player_idx], self.scores[player_idx]))
